@@ -611,6 +611,10 @@
         <!-- Add more criteria tables here with different names -->
         
         <input type="submit" value="Submit">
+        <br>
+        <br>
+        <br>
+        <button type="button" id="refreshButton">Refresh</button> <!-- Added refresh button -->
     </form>
 
     <p id="totalScore" style="display: none;">Total Score: <span id="scoreValue">N/A</span></p>
@@ -619,32 +623,32 @@
         const form = document.getElementById("rubricForm");
         const totalScoreDisplay = document.getElementById("totalScore");
         const scoreValueDisplay = document.getElementById("scoreValue");
-        const selectedValues = {};
-
+        let selectedValues = {}; // Change from const to let
+    
         form.addEventListener("change", () => {
             // Reset the total score when a change occurs
             totalScoreDisplay.style.display = "none";
             scoreValueDisplay.textContent = "N/A";
-
+    
             // Loop through each criterion and calculate the total score
             let totalScore = 0;
             let selectedCount = 0;
-
+    
             const criteria = form.querySelectorAll("input[type='radio']:checked");
             criteria.forEach((input) => {
                 const criterionName = input.name;
                 const criterionValue = parseInt(input.value);
-
+    
                 if (!isNaN(criterionValue)) {
                     if (!(criterionName in selectedValues)) {
                         selectedValues[criterionName] = [];
                     }
-
+    
                     selectedValues[criterionName].push(criterionValue);
                     selectedCount++;
                 }
             });
-
+    
             // Calculate the average score
             if (selectedCount > 0) {
                 for (const criterionName in selectedValues) {
@@ -656,15 +660,26 @@
                 }
                 totalScore /= selectedCount;
             }
-
+    
             // Update the total score display
             scoreValueDisplay.textContent = selectedCount > 0 ? totalScore.toFixed(2) : "N/A";
         });
-
+    
         form.addEventListener("submit", (event) => {
             event.preventDefault(); // Prevent the form from actually submitting
             totalScoreDisplay.style.display = "block"; // Show the total score when submitted
         });
+    
+        // Add event listener for the refresh button
+        const refreshButton = document.getElementById("refreshButton");
+        refreshButton.addEventListener("click", () => {
+            // Reset the form and clear selections
+            form.reset();
+            selectedValues = {}; // Clear the selectedValues object
+            totalScoreDisplay.style.display = "none";
+            scoreValueDisplay.textContent = "N/A";
+        });
+    
     </script>
 </body>
 </html>
