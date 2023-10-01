@@ -619,36 +619,43 @@
 
     <p id="totalScore" style="display: none;">Total Score: <span id="scoreValue">N/A</span></p>
 
+    
+
     <script>
         const form = document.getElementById("rubricForm");
         const totalScoreDisplay = document.getElementById("totalScore");
         const scoreValueDisplay = document.getElementById("scoreValue");
-        let selectedValues = {}; // Change from const to let
-    
-        form.addEventListener("change", () => {
-            // Reset the total score when a change occurs
+        let selectedValues = {};
+
+        form.addEventListener("submit", (event) => {
+            event.preventDefault(); // Prevent the form from actually submitting
+            
+            // Clear the selectedValues object when the form is submitted
+            selectedValues = {};
+
+            // Reset the total score when the form is submitted
             totalScoreDisplay.style.display = "none";
             scoreValueDisplay.textContent = "N/A";
-    
+
             // Loop through each criterion and calculate the total score
             let totalScore = 0;
             let selectedCount = 0;
-    
+
             const criteria = form.querySelectorAll("input[type='radio']:checked");
             criteria.forEach((input) => {
                 const criterionName = input.name;
                 const criterionValue = parseInt(input.value);
-    
+
                 if (!isNaN(criterionValue)) {
                     if (!(criterionName in selectedValues)) {
                         selectedValues[criterionName] = [];
                     }
-    
+
                     selectedValues[criterionName].push(criterionValue);
                     selectedCount++;
                 }
             });
-    
+
             // Calculate the average score
             if (selectedCount > 0) {
                 for (const criterionName in selectedValues) {
@@ -660,16 +667,12 @@
                 }
                 totalScore /= selectedCount;
             }
-    
+
             // Update the total score display
             scoreValueDisplay.textContent = selectedCount > 0 ? totalScore.toFixed(2) : "N/A";
+            totalScoreDisplay.style.display = "block"; // Show the total score after calculation
         });
-    
-        form.addEventListener("submit", (event) => {
-            event.preventDefault(); // Prevent the form from actually submitting
-            totalScoreDisplay.style.display = "block"; // Show the total score when submitted
-        });
-    
+
         // Add event listener for the refresh button
         const refreshButton = document.getElementById("refreshButton");
         refreshButton.addEventListener("click", () => {
@@ -679,7 +682,6 @@
             totalScoreDisplay.style.display = "none";
             scoreValueDisplay.textContent = "N/A";
         });
-    
     </script>
 </body>
 </html>
