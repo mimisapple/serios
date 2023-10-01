@@ -622,6 +622,10 @@
         const selectedValues = {};
 
         form.addEventListener("change", () => {
+            // Reset the total score when a change occurs
+            totalScoreDisplay.style.display = "none";
+            scoreValueDisplay.textContent = "N/A";
+
             // Loop through each criterion and calculate the total score
             let totalScore = 0;
             let selectedCount = 0;
